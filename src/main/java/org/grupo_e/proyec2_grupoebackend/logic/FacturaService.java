@@ -10,4 +10,6 @@ public interface FacturaService {
     FacturaDto updateFactura(FacturaDto facturaDto);
     void deleteFactura(long id);
     List<FacturaDto> findAllFacturas();
+
+    void generateXML(long id);
 }

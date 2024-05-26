@@ -5,6 +5,7 @@ import org.grupo_e.proyec2_grupoebackend.data.mapper.FacturaMapper;
 import org.grupo_e.proyec2_grupoebackend.data.repository.ClienteRepository;
 import org.grupo_e.proyec2_grupoebackend.data.repository.EmisorRepository;
 import org.grupo_e.proyec2_grupoebackend.data.repository.FacturaRepository;
+import org.grupo_e.proyec2_grupoebackend.data.repository.FacturaXML;
 import org.grupo_e.proyec2_grupoebackend.logic.FacturaService;
 import org.grupo_e.proyec2_grupoebackend.logic.models.Cliente;
 import org.grupo_e.proyec2_grupoebackend.logic.models.Emisor;
@@ -20,12 +21,14 @@ public class FacturaServiceImpl implements FacturaService {
     private FacturaRepository facturaRepository;
     private EmisorRepository emisorRepository;
     private ClienteRepository clienteRepository;
+    private FacturaXML facturaXML;
 
     @Autowired
     public FacturaServiceImpl(FacturaRepository facturaRepository, EmisorRepository emisorRepository, ClienteRepository clienteRepository) {
         this.facturaRepository = facturaRepository;
         this.emisorRepository = emisorRepository;
         this.clienteRepository = clienteRepository;
+        this.facturaXML = new FacturaXML();
     }
 
     @Override
@@ -61,6 +64,12 @@ public class FacturaServiceImpl implements FacturaService {
     public List<FacturaDto> findAllFacturas() {
         List<Factura> facturas = facturaRepository.findAll();
         return facturas.stream().map(this::mapToFacturaDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public void generateXML(long id) {
+        Factura factura = facturaRepository.findById(id).get();
+        facturaXML.generateXML(factura);
     }
 
     private FacturaDto mapToFacturaDto(Factura factura) {
